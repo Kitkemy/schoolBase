@@ -16,7 +16,6 @@ class School:
         if id_class not in self.school_classess:
             self.school_classess[id_class]=School_class(name=id_class)
         
-
         student = Student(name=name, id_class=id_class)
         self.students[name]=student
         self.school_classess[id_class].students.append(name)
@@ -74,7 +73,6 @@ class School_class:
         self.teachers=[]
         self.subjects=[]
 
-
 class Tutor:
     def __init__(self, name, classes):
         self.name = name
@@ -98,7 +96,6 @@ class Teacher:
     def __repr__(self):
         return f'{self.name} (przedmiot: {self.subject}, klasy: {self.classes})'
 
-
 class Student:
     def __init__(self, name, id_class):
         self.name = name
@@ -111,7 +108,6 @@ class Student:
         return f'{self.name} (klasa: {self.id_class})'
 
 school = School(name = 'my school')
-
 while True:
     action = input('Podaj komendę: ')
 
@@ -131,17 +127,35 @@ while True:
     if action == 'koniec':
         break
 
-###print(school.tutors)
-###print(school.teachers)
-###print(school.students)
-
-
 phrase = sys.argv[1]
 
 if phrase in school.students:
-    print(school.students[phrase])
-elif phrase in school.tutors:
-    print(school.tutors[phrase])
-elif phrase in school.teachers:
-    print(school.teachers[phrase])
+    ##wypisz wszystkie lekcje, które ma uczeń i nauczycieli, którzy je prowadzą
+    print('Uczeń ma następujące lekcje z nauczycielami:')
 
+    class_to_check = school.students[phrase].id_class
+    teachers_list = school.school_classess[class_to_check].teachers
+    for teacher in teachers_list:
+        print(teacher)
+        print(school.teachers[teacher].subject)
+
+elif phrase in school.tutors:
+    ##wypisz wszystkich uczniów, których prowadzi wychowawca
+    print('Wychowawca prowadzi następujących uczniów:')
+
+    class_to_check = school.tutors[phrase].classes
+    for id_class in class_to_check:
+       print(school.school_classess[id_class].students)
+
+elif phrase in school.teachers:
+    ##wypisz wychowawców wszystkich klas, z którym ma zajęcia nauczyciel
+    print('Nauczyciel ma zajęcia z klasami którymi wychowawcy to:')
+
+    class_to_check = school.teachers[phrase].classes
+    for id_class in class_to_check:
+       print(school.school_classess[id_class].tutors)
+    
+else:
+    ##wychowawca i uczniowie w klasie
+    print(school.school_classess[phrase].tutors)
+    print(school.school_classess[phrase].students)
